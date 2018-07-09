@@ -17,6 +17,12 @@ const app = express();
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
+
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 
@@ -30,11 +36,6 @@ app.use(
   })
 );
 
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN
-  })
-);
 
 function runServer(port = PORT) {
   const server = app
