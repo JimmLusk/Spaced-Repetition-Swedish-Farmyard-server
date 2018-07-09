@@ -7,7 +7,7 @@ const passport = require('passport');
 
 router.use(jsonParser);
 
-router.post('/', jsonParser, (req, res, next) =>{
+router.post('/', (req, res, next) =>{
 
   let {displayName, username, password} = req.body;
 
