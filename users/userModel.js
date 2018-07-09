@@ -21,7 +21,7 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-});
+},{timestamps: true});
 
 UserSchema.methods.serialize = function() {
   return {
