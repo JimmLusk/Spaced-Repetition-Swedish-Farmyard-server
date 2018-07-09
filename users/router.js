@@ -10,8 +10,6 @@ router.use(jsonParser);
 router.post('/', (req, res, next) =>{
 
   let {displayName, username, password} = req.body;
-
-  console.log('here 1');
   return User.find({username})
     .count()
     .then(count => {
@@ -27,7 +25,6 @@ router.post('/', (req, res, next) =>{
       return User.hashPassword(password);
     })
     .then(hash => {
-      console.log(hash);
       return User.create({
         username,
         password: hash,
@@ -35,14 +32,12 @@ router.post('/', (req, res, next) =>{
       });
     })
     .then(user => {
-      console.log(user);
       return res.status(201).json(user);
     })
     .catch(err => {
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
-      console.log(err);
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
