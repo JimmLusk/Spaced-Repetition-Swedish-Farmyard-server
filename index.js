@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -9,6 +7,10 @@ const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 
 const app = express();
+
+app.get('/api/test', (req, res, next) => {
+  res.json('It works');
+});
 
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
