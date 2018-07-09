@@ -4,9 +4,12 @@ const morgan = require('morgan');
 
 const { PORT, CLIENT_ORIGIN, MONGODB_URI } = require('./config');
 const { dbConnect } = require('./db-mongoose');
-// const {dbConnect} = require('./db-knex');
+
+const {router: userRouter} = require('./users/router');
 
 const app = express();
+
+app.use('/api/users', userRouter);
 
 app.get('/api/test', (req, res, next) => {
   res.json('It works');
