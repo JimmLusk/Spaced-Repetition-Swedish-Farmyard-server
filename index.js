@@ -17,8 +17,8 @@ const app = express();
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use('/api/auth/', authRouter);
-app.use('/api/users/', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 app.get('/api/test', (req, res, next) => {
   res.json('It works');

@@ -45,6 +45,10 @@ router.post('/', (req, res, next) =>{
 // Everything under here is protected endpoints
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-
+router.get('/test', jwtAuth, (req, res, next) => {
+  return res.json({
+    data: 'rosebud'
+  });
+});
 
 module.exports = {router};
