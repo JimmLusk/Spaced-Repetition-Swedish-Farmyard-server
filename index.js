@@ -11,7 +11,8 @@ const jwtStrategy = require('./auth/jwt');
 
 const {router: authRouter } = require('./auth/router');
 const {router: userRouter} = require('./users/router');
-const {router: orderRouter} = require('./orders/router');
+//const {router: orderRouter} = require('./orders/router');
+const {router: questionRouter} = require('./questions/router');
 
 const app = express();
 
@@ -20,7 +21,8 @@ passport.use(jwtStrategy);
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
-app.use('/api/orders', orderRouter);
+//app.use('/api/orders', orderRouter);
+app.use('/api/q', questionRouter);
 
 app.get('/api/test', (req, res, next) => {
   res.json('It works');

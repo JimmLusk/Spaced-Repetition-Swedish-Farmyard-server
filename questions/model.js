@@ -15,9 +15,6 @@ const QuestionSchema = mongoose.Schema({
   audioURL: {
     type: String,
   },
-  place:{
-    type: Number
-  }
 });
 
 
