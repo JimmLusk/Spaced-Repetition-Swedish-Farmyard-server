@@ -17,6 +17,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  head: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: {'$oid': '5b44c5fffb6fc043c8cea0ef'},
+  }
 },{timestamps: true});
 
 UserSchema.methods.serialize = function() {
