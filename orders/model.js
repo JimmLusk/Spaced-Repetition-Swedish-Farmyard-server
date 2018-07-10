@@ -5,7 +5,7 @@ mongoose.promise = global.Promise;
 const OrderSchema = mongoose.Schema({
   order: {
     type: [String],
-    default: ['dog', 'wolf', 'bear','horse','cat','pig','chicken','spider','turtle', 'fish'],
+    default: [{q: 'wolf', next: 1}, 'bear','horse','cat','pig','chicken','spider','turtle', 'fish', 'dog'],
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

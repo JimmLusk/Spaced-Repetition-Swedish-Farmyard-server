@@ -18,8 +18,8 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   order: {
-    type: mongoose.Schema.Types.ObjectId,
-  }
+    type: [1, 2, 3, 5, 8, 4]
+  },
 },{timestamps: true});
 
 UserSchema.methods.serialize = function() {
