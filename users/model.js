@@ -17,9 +17,13 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  head: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: {'$oid': '5b44c5fffb6fc043c8cea0ef'},
+  order: {
+    type: [{qId: mongoose.Schema.Types.ObjectId, nextIndex: Number}]
+    //example: [{q:0, nextIndex:1},{q:1, nextIndex:2},{q:2, nextIndex:3},{q:3, nextIndex:0}]
+  },
+  position: {
+    type: Number,
+    default: 0
   }
 },{timestamps: true});
 

@@ -15,10 +15,6 @@ const QuestionSchema = mongoose.Schema({
   audioURL: {
     type: String,
   },
-  next: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: null,
-  }
 });
 
 
