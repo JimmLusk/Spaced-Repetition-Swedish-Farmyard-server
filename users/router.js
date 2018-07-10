@@ -17,14 +17,14 @@ router.post('/', (req, res, next) =>{
     //console.log(result);
     let LinkedListArray = result.map((q, index) => {
       if(index === result.length-1){
-        return {qId: q._id, nextIndex: null};
+        return {qId: q._id, nextIndex: 0};
       }
       return {qId: q._id, nextIndex: index+1};
     });
     console.log(LinkedListArray);
     questionsArray = LinkedListArray;
     return LinkedListArray;
-  }).then(LLArr => {
+  }).then(() => {
     return User.find({username}).count();
   }).then(count => {
     if(count > 0){

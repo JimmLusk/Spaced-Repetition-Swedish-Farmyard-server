@@ -29,14 +29,16 @@ router.get('/next', jwtAuth, (req, res, next) => {
       let position = user.position;
       let currentNode = user.order[position];
       let questionId = currentNode.qId;
-      //User.findByIdAndUpdate(userId, {position: currentNode.nextId});
+      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
+        console.log(res);
+      });
       return questionId;
     }).then(qId => {
       console.log(qId);
       return Question.findById(qId);
     }).then(question => {
       console.log(question);
-      res.json(question);
+      res.status(202).json(question);
     }).catch(err => {
       next(err);
     });
