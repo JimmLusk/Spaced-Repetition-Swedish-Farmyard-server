@@ -53,40 +53,6 @@ router.post('/', (req, res, next) =>{
     console.log(err);
     res.status(500).json({code: 500, message: 'Internal server error'});
   });
-
- 
-
-
-  // return User.find({username})
-  //   .count()
-  //   .then(count => {
-  //     if(count > 0){
-  //       return Promise.reject({
-  //         code: 422,
-  //         reason: 'ValidationError',
-  //         message: 'Username taken',
-  //         location: 'username',
-  //       });
-  //     }
-  //     return User.hashPassword(password);
-  //   })
-  //   .then(hash => {
-  //     return User.create({
-  //       username,
-  //       password: hash,
-  //       displayName,
-  //       order: LinkedListArray,
-  //     });
-  //   })
-  //   .then(user => {
-  //     return res.status(201).json(user);
-  //   })
-  //   .catch(err => {
-  //     if (err.reason === 'ValidationError') {
-  //       return res.status(err.code).json(err);
-  //     }
-  //     res.status(500).json({code: 500, message: 'Internal server error'});
-  //   });
 });
 
 // Everything under here is protected endpoints
