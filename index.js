@@ -19,6 +19,12 @@ const app = express();
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
+
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 //app.use('/api/orders', orderRouter);
@@ -31,12 +37,6 @@ app.get('/api/test', (req, res, next) => {
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
-  })
-);
-
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN
   })
 );
 
