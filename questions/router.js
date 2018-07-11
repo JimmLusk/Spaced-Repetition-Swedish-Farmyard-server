@@ -47,17 +47,36 @@ router.get('/next', jwtAuth, (req, res, next) => {
 router.post('/answer', jwtAuth, (req, res, next)=>{
   let userId = req.user._id;
   let { correct } = req.body;
+ 
   User.findById(userId)
     .then(user => {
+
+      //Validate if `correct` is of the correct type
+      if(typeof correct !== 'boolean'){
+        Promise.reject({
+          code: 400,
+          reason: 'Bad Request',
+          message: 'Value of `correct` must be of type boolean',
+        });
+      }
+    
       let position = user.position;
       let currentNode = user.order[position];
       //let questionId = currentNode.qId;
       User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
         console.log(res);
       });
+
     })
     .then(() => {
-      res.status(200).json({correct});
+      res.status(202).json({correct});
+    }).catch(err => {
+
+      if (err.reason === 'Bad Request') {
+        return res.status(err.code).json(err);
+      }
+      res.status(500).json({code: 500, message: 'Internal server error'});
+
     });
 });
 
