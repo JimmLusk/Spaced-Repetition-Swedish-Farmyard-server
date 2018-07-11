@@ -21,7 +21,7 @@ const UserSchema = mongoose.Schema({
     type: [{qId: mongoose.Schema.Types.ObjectId, nextIndex: Number}]
     //example: [{q:0, nextIndex:1},{q:1, nextIndex:2},{q:2, nextIndex:3},{q:3, nextIndex:0}]
   },
-  position: {
+  position/*head*/: {
     type: Number,
     default: 0
   }

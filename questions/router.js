@@ -29,9 +29,9 @@ router.get('/next', jwtAuth, (req, res, next) => {
       let position = user.position;
       let currentNode = user.order[position];
       let questionId = currentNode.qId;
-      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
-        console.log(res);
-      });
+      // User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
+      //   console.log(res);
+      // });
       return questionId;
     }).then(qId => {
       console.log(qId);
@@ -42,8 +42,23 @@ router.get('/next', jwtAuth, (req, res, next) => {
     }).catch(err => {
       next(err);
     });
-  
-  
+});
+
+router.post('/answer', jwtAuth, (req, res, next)=>{
+  let userId = req.user._id;
+  let { correct } = req.body;
+  User.findById(userId)
+    .then(user => {
+      let position = user.position;
+      let currentNode = user.order[position];
+      //let questionId = currentNode.qId;
+      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
+        console.log(res);
+      });
+    })
+    .then(() => {
+      res.status(200).json({correct});
+    });
 });
 
 module.exports = {router}; 
