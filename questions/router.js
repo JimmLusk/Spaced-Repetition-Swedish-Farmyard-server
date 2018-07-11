@@ -67,8 +67,7 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
       User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, () => {
         console.log('incremented to next position');
       });
-
-      User.findByIdAndUpdate({_id: userId, }, {$set: {order: [] }}, () => {console.log('re-ordered');});
+      //User.findByIdAndUpdate({_id: userId, }, {$set: {order: [] }}, () => {console.log('re-ordered');});
     })
     .then(() => {
       res.status(202).json({correct});

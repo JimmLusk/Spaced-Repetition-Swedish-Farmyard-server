@@ -17,9 +17,9 @@ router.post('/', (req, res, next) =>{
     //console.log(result);
     let LinkedListArray = result.map((q, index) => {
       if(index === result.length-1){
-        return {qId: q._id, nextIndex: 0};
+        return {qId: q._id, nextIndex: 0, weight: 1};
       }
-      return {qId: q._id, nextIndex: index+1};
+      return {qId: q._id, nextIndex: index+1, weight: 1};
     });
     console.log(LinkedListArray);
     questionsArray = LinkedListArray;
