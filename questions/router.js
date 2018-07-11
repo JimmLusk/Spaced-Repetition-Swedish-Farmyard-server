@@ -47,7 +47,8 @@ router.get('/next', jwtAuth, (req, res, next) => {
 router.post('/answer', jwtAuth, (req, res, next)=>{
   let userId = req.user._id;
   let { correct } = req.body;
- 
+  const mValue = 2;
+  
   User.findById(userId)
     .then(user => {
 
@@ -63,10 +64,11 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
       let position = user.position;
       let currentNode = user.order[position];
       //let questionId = currentNode.qId;
-      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
-        console.log(res);
+      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, () => {
+        console.log('incremented to next position');
       });
 
+      User.findByIdAndUpdate({_id: userId, }, {$set: {order: [] }}, () => {console.log('re-ordered');});
     })
     .then(() => {
       res.status(202).json({correct});
