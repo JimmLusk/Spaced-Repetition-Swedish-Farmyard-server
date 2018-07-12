@@ -8,36 +8,19 @@ const jsonParser = bodyParser.json();
 const passport = require('passport');
 
 
-
 router.use(jsonParser);
 
-router.get('/', (req, res, next) => {
-  Question.find({})
-    .then(result => {
-      console.log(typeof result);
-      console.log(result);
-      res.status(200);
-    });
-});
-
 const jwtAuth = passport.authenticate('jwt', {session: false});
+
 router.get('/next', jwtAuth, (req, res, next) => {
   let userId = req.user._id;
-  console.log(userId);
+  console.log(`${req.user.username} requested their next question`);
   User.findById(userId)
     .then(user => {
-      let position = user.position;
-      let currentNode = user.order[position];
-      let questionId = currentNode.qId;
-      // User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, (res) => {
-      //   console.log(res);
-      // });
-      return questionId;
+      return user.order[user.position].qId;
     }).then(qId => {
-      console.log(qId);
       return Question.findById(qId);
     }).then(question => {
-      console.log(question);
       res.status(202).json(question);
     }).catch(err => {
       next(err);
@@ -51,7 +34,7 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
   User.findById(userId)
     .then(user => {
 
-      //Validate if `correct` is of the correct type
+      // Validate if `correct` is of the correct type
       if(typeof correct !== 'boolean'){
         Promise.reject({
           code: 400,
@@ -60,28 +43,15 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
         });
       }
     
-      const position = user.position; // Position(index) of question just answered
+      const position = user.position; // Position/index of question just answered
       const currentQuestion = user.order[position]; // 
-      const questionId = currentQuestion.qId; 
       const questionWeight = currentQuestion.weight;
-      
-      //increment position to positions.next before other things get wonky
-      User.findOneAndUpdate({_id: userId}, {$set: {position: currentQuestion.nextIndex}}, () => {
-        console.log('incremented to next position');
-      });
 
       let newWeight;
       if(correct){
-        //double weight
         newWeight = Math.floor(questionWeight*2);
-        User.findOneAndUpdate({_id: userId, 'order.qId': `${questionId}`}, {$set: {'order.$.weight': newWeight}},() => {
-          console.log('hopefully incremented weight');
-        });
       } else {
         newWeight = 1;
-        User.findOneAndUpdate({_id: userId, 'order.qId': `${questionId}`}, {$set: {'order.$.weight': newWeight}},() => {
-          console.log('hopefully set weight to 1');
-        });
       }
 
       User.findById(userId, (err, user) => {
@@ -91,6 +61,10 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
             message: 'Couldn`t find user'
           });
         }
+
+        user.position = currentQuestion.nextIndex;
+        user.order[position].weight = newWeight;
+
         let currentNode = user.order[position];
         for(let i = 1; i <= newWeight; i++){
           currentNode = user.order[currentNode.nextIndex];
@@ -100,7 +74,7 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
         user.order[position].nextIndex = temp;
 
         user.save(() => {
-          console.log(`Ran algorithim${'.'}`);
+          console.log(`Reordered for ${user.username}`);
         });
       });
 
