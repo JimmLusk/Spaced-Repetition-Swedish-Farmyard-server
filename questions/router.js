@@ -84,26 +84,26 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
         });
       }
 
-      //find index that is question just answered's index + weight (may need % with the length)
-      //          OR am I supposed to traverse?
-      let newNextIndex = position + newWeight;
-      if(newNextIndex > user.order.length-1){
-        let m = newNextIndex % user.order.length;
-        newNextIndex = m;
-      }
-      //set next of index found above to index of the question just answered
-      let setObj1 = {};
-      setObj1[`order.${position}.nextIndex`] = newNextIndex;
-      User.findOneAndUpdate({_id: userId}, {$set: setObj1},  () => {
-        console.log(`set current question's next to ${newNextIndex}`);
+      User.findById(userId, (err, user) => {
+        if(err){
+          Promise.reject({
+            code: 500,
+            message: 'Couldn`t find user'
+          });
+        }
+        let currentNode = user.order[position];
+        for(let i = 1; i <= newWeight; i++){
+          currentNode = user.order[currentNode.nextIndex];
+        }
+        let temp = currentNode.nextIndex;
+        currentNode.nextIndex = position;
+        user.order[position].nextIndex = temp;
+
+        user.save(() => {
+          console.log(`Ran algorithim${'.'}`);
+        });
       });
-      //set question just answered's next to the next of the index changes above
-      let setObj2 = {};
-      setObj2['order.' + newNextIndex + '.nextIndex'] = position;
-      User.findOneAndUpdate({_id: userId}, {$set: setObj2},  () => {
-        console.log(`set new next question's next to ${position}`);
-      });
-    
+
     })
     .then(() => {
       res.status(202).json({correct});
