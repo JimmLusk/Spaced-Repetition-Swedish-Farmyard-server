@@ -47,7 +47,6 @@ router.get('/next', jwtAuth, (req, res, next) => {
 router.post('/answer', jwtAuth, (req, res, next)=>{
   let userId = req.user._id;
   let { correct } = req.body;
-  const mValue = 2;
   
   User.findById(userId)
     .then(user => {
@@ -61,13 +60,50 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
         });
       }
     
-      let position = user.position;
-      let currentNode = user.order[position];
-      //let questionId = currentNode.qId;
-      User.findOneAndUpdate({_id: userId}, {$set: {position: currentNode.nextIndex}}, () => {
+      const position = user.position; // Position(index) of question just answered
+      const currentQuestion = user.order[position]; // 
+      const questionId = currentQuestion.qId; 
+      const questionWeight = currentQuestion.weight;
+      
+      //increment position to positions.next before other things get wonky
+      User.findOneAndUpdate({_id: userId}, {$set: {position: currentQuestion.nextIndex}}, () => {
         console.log('incremented to next position');
       });
-      //User.findByIdAndUpdate({_id: userId, }, {$set: {order: [] }}, () => {console.log('re-ordered');});
+
+      let newWeight;
+      if(correct){
+        //double weight
+        newWeight = Math.floor(questionWeight*2);
+        User.findOneAndUpdate({_id: userId, 'order.qId': `${questionId}`}, {$set: {'order.$.weight': newWeight}},() => {
+          console.log('hopefully incremented weight');
+        });
+      } else {
+        newWeight = 1;
+        User.findOneAndUpdate({_id: userId, 'order.qId': `${questionId}`}, {$set: {'order.$.weight': newWeight}},() => {
+          console.log('hopefully set weight to 1');
+        });
+      }
+
+      //find index that is question just answered's index + weight (may need % with the length)
+      //          OR am I supposed to traverse?
+      let newNextIndex = position + newWeight;
+      if(newNextIndex > user.order.length-1){
+        let m = newNextIndex % user.order.length;
+        newNextIndex = m;
+      }
+      //set next of index found above to index of the question just answered
+      let setObj1 = {};
+      setObj1[`order.${position}.nextIndex`] = newNextIndex;
+      User.findOneAndUpdate({_id: userId}, {$set: setObj1},  () => {
+        console.log(`set current question's next to ${newNextIndex}`);
+      });
+      //set question just answered's next to the next of the index changes above
+      let setObj2 = {};
+      setObj2['order.' + newNextIndex + '.nextIndex'] = position;
+      User.findOneAndUpdate({_id: userId}, {$set: setObj2},  () => {
+        console.log(`set new next question's next to ${position}`);
+      });
+    
     })
     .then(() => {
       res.status(202).json({correct});

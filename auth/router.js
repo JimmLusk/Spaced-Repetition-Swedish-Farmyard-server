@@ -18,7 +18,9 @@ const createAuthToken = user => jwt.sign({ user }, JWT_SECRET, {
   algorithm: 'HS256'
 });
 
-router.post('/login', localAuth, (req, res) => res.json({authToken: createAuthToken(req.user)}));
+router.post('/login', localAuth, (req, res) => {
+  res.json({authToken: createAuthToken(req.user)});
+});
 router.post('/refresh', jwtAuth, (req, res) => res.json({authToken: createAuthToken(req.user)}));
 
 module.exports = {router};
