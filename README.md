@@ -30,18 +30,60 @@ To respond with if the user was correct or incorrect make a POST to /api/q/answe
 
 ### api/user
 #### POST api/user
+Create a user, unprotected.
+Request body example, all fields are required:
+```json
+{
+    "username":"foobar",
+    "password":"learnSwedish",
+    "displayName":"Foo"
+}
+```
 
 ### api/auth
 #### POST api/auth/login
+Log a user in, unprotected.
+Request body example, all fields are required:
+```json
+{
+    "username":"foobar",
+    "password":"learnSwedish",
+}
+```
+Successful response body example:
+```json
+{
+    "authToken":"aAnfj8dDFgklnf45sdasD.adsf...",
+}
+```
+Unsuccessful request returns a 401 (Unauthorized) status code. 
 
 ### api/q
 #### GET api/q/next
+Get the question to be displayed to the user.
+Successful response body example:
+```json
+{
+    "_id": "5b467343fb6fc062bcfa8106",
+    "imgSrc": "https://s3.eu-central-1.amazonaws.com/ap-production-media-storage/245/conversions/full.jpg",
+    "svWord": "spindel",
+    "enWord": "spider",
+    "timesAnswered": 2,
+    "timesCorrect": 4,
+    "weight": 16
+}
+```
 #### POST api/q/answer
 
 
 
 
-#### Setting Up Another Instance
+### Setting Up Another Instance
 To deploy you'll need a JWT_SECRET and a MONGODB_URI in your enviorment variables. We stored ours in a .env file.
+
+
+
+[Presentation by Dominick Mckoy](https://prezi.com/view/AvAVg3rzgsmlSfPLHr72/)
+
 
 
