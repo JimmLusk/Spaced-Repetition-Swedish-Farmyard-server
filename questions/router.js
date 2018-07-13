@@ -66,7 +66,12 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
 
         let newWeight;
         if(correct){
-          newWeight = Math.floor(questionWeight*2);
+          if(questionWeight < 32){
+            newWeight = Math.floor(questionWeight*2);
+          } else {
+            newWeight = 32;
+          }
+          
           user.order[position].timesAnswered += 1;
           user.order[position].timesCorrect += 1;
         } else {
