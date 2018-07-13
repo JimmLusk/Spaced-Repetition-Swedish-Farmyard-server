@@ -2,6 +2,9 @@
 
 The back end of a full stack learning app for Swedish words for animals. Uses a spaced repetition algorithm to order questions with progressively longer gaps between apperances so long as the user gets them correct.
 
+[Deployed](https://swedish-yard.herokuapp.com/dashboard)
+[Front-End Repository](https://github.com/mckoyd/spacedRepetition-client) 
+
 ## Users
 
 ### Create a User

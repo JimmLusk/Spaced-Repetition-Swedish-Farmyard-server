@@ -18,14 +18,17 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 before(function() {
+  this.timeout(10000);
   return dbConnect(TEST_DATABASE_URL);
 });
 
 after(function() {
+  this.timeout(10000); 
   return dbDisconnect();
 });
 
 describe('Mocha and Chai', function() {
+  this.timeout(10000);
   it('should be properly setup', function() {
     expect(true).to.be.true;
   });
