@@ -60,22 +60,37 @@ Unsuccessful request returns a 401 (Unauthorized) status code.
 
 ### api/q
 #### GET api/q/next
-Get the question to be displayed to the user.
+Get the question to be displayed to the user, JWT protected.
 Successful response body example:
 ```json
 {
-    "_id": "5b467343fb6fc062bcfa8106",
-    "imgSrc": "https://s3.eu-central-1.amazonaws.com/ap-production-media-storage/245/conversions/full.jpg",
+    "_id": "5c478a54fc6fc260bcfa1817",
+    "imgSrc": "https://example.com/spider.jpg",
     "svWord": "spindel",
     "enWord": "spider",
     "timesAnswered": 2,
     "timesCorrect": 4,
-    "weight": 16
+    "weight": 2
 }
 ```
+Unsuccessful request returns a 401 (Unauthorized) status code. 
+
 #### POST api/q/answer
+Tell the server if the user answered correctly and prepare to send the next question, JWT protected.
+Request body example, all fields requried:
+```json
+{
+    "correct": true,
+}
+```
 
-
+Successful response body example:
+```json
+{
+    "correct": true,
+}
+```
+Unsuccessful request returns a 401 (Unauthorized) status code. 
 
 
 ### Setting Up Another Instance
@@ -83,7 +98,7 @@ To deploy you'll need a JWT_SECRET and a MONGODB_URI in your enviorment variable
 
 
 
+
+
+
 [Presentation by Dominick Mckoy](https://prezi.com/view/AvAVg3rzgsmlSfPLHr72/)
-
-
-
