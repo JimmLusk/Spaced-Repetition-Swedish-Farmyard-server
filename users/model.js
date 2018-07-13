@@ -18,7 +18,8 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   order: {
-    type: [{qId: mongoose.Schema.Types.ObjectId, nextIndex: Number, weight: Number}]
+    type: [{qId: mongoose.Schema.Types.ObjectId, nextIndex: Number, weight: Number, 
+      timesAnswered: Number, timesCorrect: Number}]
   },
   position/*head*/: {
     type: Number,

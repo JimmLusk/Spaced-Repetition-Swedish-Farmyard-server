@@ -1,6 +1,6 @@
-# Thinkful Backend Template
+# Swedish Farmyard Spaced Repetition Learning App Server  
 
-A template for developing and deploying Node.js apps.
+The back end of a full stack learning app for Swedish words for animals.
 
 ## Getting started
 

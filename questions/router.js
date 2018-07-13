@@ -14,14 +14,23 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.get('/next', jwtAuth, (req, res, next) => {
   let userId = req.user._id;
+  let qRefObj;
   console.log(`${req.user.username} requested their next question`);
   User.findById(userId)
     .then(user => {
+      qRefObj = user.order[user.position];
       return user.order[user.position].qId;
     }).then(qId => {
       return Question.findById(qId);
     }).then(question => {
-      res.status(202).json(question);
+      res.status(202).json({
+        _id: question._id,
+        imgSrc: question.imgSrc,
+        svWord: question.svWord,
+        enWord: question.enWord, 
+        timesAnswered: qRefObj.timesAnswered, 
+        timesCorrect: qRefObj.timesCorrect,  
+        weight: qRefObj.weight });
     }).catch(err => {
       next(err);
     });
@@ -47,19 +56,22 @@ router.post('/answer', jwtAuth, (req, res, next)=>{
       const currentQuestion = user.order[position]; // 
       const questionWeight = currentQuestion.weight;
 
-      let newWeight;
-      if(correct){
-        newWeight = Math.floor(questionWeight*2);
-      } else {
-        newWeight = 1;
-      }
-
       User.findById(userId, (err, user) => {
         if(err){
           Promise.reject({
             code: 500,
             message: 'Couldn`t find user'
           });
+        }
+
+        let newWeight;
+        if(correct){
+          newWeight = Math.floor(questionWeight*2);
+          user.order[position].timesAnswered += 1;
+          user.order[position].timesCorrect += 1;
+        } else {
+          newWeight = 1;
+          user.order[position].timesAnswered += 1;
         }
 
         user.position = currentQuestion.nextIndex;
