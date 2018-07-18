@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const passport = require('passport');
 require('dotenv').config();
 
-const { PORT, CLIENT_ORIGIN, CLIENT_ORIGIN_2, MONGODB_URI } = require('./config');
+const { PORT, CLIENT_ORIGIN, MONGODB_URI } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
 const localStrategy = require('./auth/local');
@@ -19,19 +19,10 @@ const app = express();
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-const whitelist = [CLIENT_ORIGIN, CLIENT_ORIGIN_2];
-let corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
-
 app.use(
-  cors(corsOptions)
+  cors({
+    origin: CLIENT_ORIGIN
+  })
 );
 
 app.use('/api/auth', authRouter);
