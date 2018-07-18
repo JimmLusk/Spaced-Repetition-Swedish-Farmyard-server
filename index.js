@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
-//require('dotenv').config();
+require('dotenv').config();
 
 const { PORT, CLIENT_ORIGIN, MONGODB_URI } = require('./config');
 const { dbConnect } = require('./db-mongoose');
